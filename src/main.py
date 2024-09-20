@@ -2,7 +2,6 @@ import pygame
 from display import Window, TextBox, SlideBox, DropdownBox, ButtonBox
 from algs import algorithmsDict
 from random import randint
-import time
 import math
 
 # Initialize pygame modules
@@ -10,6 +9,7 @@ pygame.init()
 
 # Font
 baseFont = pygame.font.SysFont('Arial', 24)
+menuFont= pygame.font.SysFont('Arial', 20)
 
 # Colors
 grey = (100, 100, 100)
@@ -18,10 +18,16 @@ white = (250, 250, 250)
 red = (255, 50, 50)
 black = (0, 0, 0)
 blue = (50, 50, 255)
-
 pygame.display.set_caption('Sorting Algorithms Visualizer')
 screen = pygame.display.set_mode((900, 500))
 window = Window(screen)
+
+# Algorithms by complexity
+polynomial_complexities=['exchange','oddEven','strand','stooge','bucket','binaryInsertion'
+,'pancake', 'comb','gnome','cycle','cocktail','selection','bubble','insertion']
+nlogn_complexities=[ 'counting','tree','tim','shell','heap','quick','merge']
+other_complexities=['bogo: O((n+1)!)', 'bitonic: O(log^2(n))','radix: O(n*k)','pigeonhole: O(n+k)', 'counting: O(n+k)']
+
 
 window.add_widget(
     widget_id = 'size_input',
@@ -31,9 +37,22 @@ window.add_widget(
     widget_id = 'algorithm_input',
     widget = DropdownBox((140, 440, 200, 50), 'Algorithm', grey, baseFont, list(algorithmsDict.keys()), white)
 )
+
 window.add_widget(
     widget_id = 'play_button',
     widget = ButtonBox((350, 440, 40, 40), 'res/playButton.png', 'res/stopButton.png')
+)
+window.add_widget(
+    widget_id = 'poly_complexities',
+    widget = DropdownBox((430, 440, 110, 50), 'Polynomial Menu', grey, menuFont, polynomial_complexities, white)
+)
+window.add_widget(
+    widget_id = 'nlogn_complexities',
+    widget = DropdownBox((580, 440, 110, 50), 'O(nlog(n)) Menu', grey, menuFont, nlogn_complexities, white)
+)
+window.add_widget(
+    widget_id = 'other_complexities',
+    widget = DropdownBox((730, 440, 150, 50), 'Other Complexities', grey, menuFont, other_complexities, white)
 )
 
 def drawBars(screen, array, redBar1, redBar2, blueBar1, blueBar2, greenRows = {}):
@@ -56,7 +75,6 @@ def main():
     isPlaying = False
     isSorting = False
     sortingIterator = None
-    
     while running:
         screen.fill(white)
         for event in pygame.event.get():
@@ -66,7 +84,7 @@ def main():
             window.update(event)
 
         isPlaying = window.get_widget_value('play_button')
-        if isPlaying and not isSorting:    
+        if isPlaying and not isSorting:
             # random list to be sorted
             numBars = int(window.get_widget_value('size_input'))
             numbers = [randint(10, 400) for i in range(numBars)] 
