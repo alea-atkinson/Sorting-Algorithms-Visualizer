@@ -1,6 +1,5 @@
 from algorithms import *
 
-
 algorithmsDict = {
     'insertionSort'       : insertionSort,
     'bubbleSort'          : bubbleSort,
@@ -28,4 +27,6 @@ algorithmsDict = {
     'exchangeSort'        : exchangeSort,
     'treeSort'            : treeSort
 }
+
+
 
